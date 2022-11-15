@@ -14,38 +14,39 @@ btn.onclick = () => {
 
 class chicken {
     constructor() {
-        this.width = 50;
-        this.height = 50;
-        // this.img = new Image();
-        // this.path = "./res/img/chicken.jpg";
-        // this.img.src = this.path;
         this.position = {
-            x: 200,
-            y: 200,
+            x: 50,
+            y: 800,
         };
+        this.width = 10;
+        this.height = 10;
+        
     }
 
     draw() {
-        ctx.fillStyle = "red";
-        ctx.fillRect( this.width, this.height, this.position.x, this.position.y);
+        ctx.drawImage(chickenImg, this.width, this.height);
     }
     update() {
         this.draw();
     }
 }
 
-const bot = new chicken();
+let chickenImg = new Image;
+
+chickenImg.src = "./res/img/chicken.jpg";
+const bot = new chicken(chickenImg);
+
+
 
 function botMovement() {
-    requestAnimationFrame(botMovement);
     bot.update();
 
     for(;bot.position.x < canvas.width;) {
-        bot.position.x = bot.position.x + 1;
+        bot.position.x = bot.position.x + 50;
         console.log(bot.position.x);
-
+        
     }
-
+    requestAnimationFrame(botMovement);
 }
 
 botMovement();
