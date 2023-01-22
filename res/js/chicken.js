@@ -1,4 +1,4 @@
-import {canvas, wrap, btn, ctx} from "./canvas.js";
+import {canvas, wrap, btn, ctx, array} from "./canvas.js";
 
 export class Chicken {
     constructor() {
