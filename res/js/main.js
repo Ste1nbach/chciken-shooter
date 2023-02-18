@@ -4,6 +4,8 @@ import { Chicken } from "./chicken.js";
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+let posY = Math.floor (Math.random() * canvas.height);
+let i = 0;
 
 btn.onclick = () => {
     wrap.style.display = "none";
@@ -17,14 +19,26 @@ const bot = new Chicken();
 
 
 const generate = () => {
-    for(let i = 0; i < 10; i++) {
-        array[i] = Math.floor (Math.random() * canvas.height); 
-        bot.position.y = array[i];
-        console.log(bot.position.y);
+           i++;
+           
+        if(i % 430 == 0) {
+            do{
+                posY = Math.floor (Math.random() * canvas.height);
+                bot.position.y = posY;
+            }while(posY < 50 || posY > 300);
+            console.log("de");
+            
+            bot.position.x = 50;
+            
+            
     }
+    bot.update();
+       
+        console.log(posY);
+    
 
 }
-generate();
+
 
 const draw = () => {
     for(let i = 0; i < 10; i++) {
@@ -32,17 +46,15 @@ const draw = () => {
     }
 }
 
-draw();
+
 
 
 
 function botMovement() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    bot.update();
     bot.position.x += 5;
-    
-   
+    generate();
     requestAnimationFrame(botMovement);
 }
 
