@@ -8,8 +8,8 @@ let chickenRemove = new Image;
 let chickenRot = new Image;
 let start = false;
 
-chickenRemove.src = "./res/img/ptak.png";
-chickenRot.src = "./res/img/ptak2.png";
+chickenRemove.src = "./res/img/ptak-remove.png";
+chickenRot.src = "./res/img/ptak2-remove.png";
 
 
 let posY = Math.floor (Math.random() * canvas.height);
@@ -29,8 +29,9 @@ const bot2 = new Chicken(canvas.width, chickenRot);
 chicken.push(bot);
 chicken.push(bot2);
 */
+
 const generateChickens = () => {
-    for (let i = 1; i < 100; i++) {
+    for (let i = 1; i < 30; i++) {
         if(i%2 == 0) {
             chicken.push(new Chicken(canvas.width + i * 150, chickenRot, "rightToLeft"));
         } else {
