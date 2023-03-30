@@ -10,6 +10,7 @@ const chicken = [];
 let start = false;
 let pts = 0;
 let HP = 1;
+let death = false; 
 
 chickenRemove.src = "./res/img/ptak-remove.png";
 chickenRot.src = "./res/img/ptak2-remove.png";
@@ -39,17 +40,36 @@ const generate = () => {
 
     if (HP == 0) {
         start = false;
+        death = true;
        for(let i = 0; i < chicken.length; i++) {
         chicken.splice(i, 0);
         chicken.splice(0, i);
-        
        }
         
-
-        ctx.fillStyle = "white";
-        ctx.font = "bold 30px sans-serif";
-        ctx.fillText("GAME OVER PRESS ENTER TO RESTART", canvas.width / 2 - 250, canvas.height / 2);
+        if(death = true) {
+            ctx.fillStyle = "white";
+            ctx.font = "bold 30px sans-serif";
+            ctx.fillText("GAME OVER PRESS SPACE TO RESTART", canvas.width / 2 - 250, canvas.height / 2);
+        }
+        
     }
+
+    
+    if(start == false) {
+        window.addEventListener("keydown", (e) => {
+            switch (e.key) {
+              case " ":
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                start = true;
+                death = false;
+                console.log(e.key);
+                console.log(death);
+                console.log(start);
+                break;
+            }
+          });
+    }
+    
 
     for (let i = 0; i < chicken.length; i++) {
 
@@ -74,6 +94,8 @@ const generate = () => {
     }
 
 }
+
+
 
 const score = () => {
     ctx.fillStyle = "white";
@@ -112,18 +134,7 @@ const generateChickens = () => {
     }
 }
 
-const pain = () => {
-    for (let i = 0; i < chicken.length; i++) {
-        if (chicken[i].direction == "leftToRight" && chicken[i] > canvas.width) {
-            HP--;
-        }
-    }
-}
-
-
-
-
-function botMovement() {
+function gameLoop() {
 
     if (chicken.length == 0) {
         return;
@@ -142,10 +153,13 @@ function botMovement() {
 
         generate();
     }
-    requestAnimationFrame(botMovement);
+    requestAnimationFrame(gameLoop);
     score();
     hp();
 }
-pain();
-generateChickens();
-botMovement();
+
+if(start = true) {
+    generateChickens();
+}
+
+gameLoop();
