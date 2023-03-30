@@ -7,6 +7,7 @@ canvas.height = window.innerHeight;
 let chickenRemove = new Image;
 let chickenRot = new Image;
 let start = false;
+let score = 0;
 
 chickenRemove.src = "./res/img/ptak-remove.png";
 chickenRot.src = "./res/img/ptak2-remove.png";
@@ -29,16 +30,6 @@ const bot2 = new Chicken(canvas.width, chickenRot);
 chicken.push(bot);
 chicken.push(bot2);
 */
-
-const generateChickens = () => {
-    for (let i = 1; i < 30; i++) {
-        if(i%2 == 0) {
-            chicken.push(new Chicken(canvas.width + i * 150, chickenRot, "rightToLeft"));
-        } else {
-            chicken.push(new Chicken(-150 * i, chickenRemove, "leftToRight"));
-        }
-    }
-}
 
 
 
@@ -67,6 +58,12 @@ const generate = () => {
 
 }
 
+const  hp = () => {
+    ctx.fillStyle = "white";
+    ctx.font = "bold 20px sans-serif";
+    ctx.fillText(`Score: ${score}`, 20, 30);
+}
+
 
 
 canvas.addEventListener('click', function(event) {
@@ -77,15 +74,27 @@ canvas.addEventListener('click', function(event) {
         if((chicken[i].position.x <= clickX && chicken[i].position.x + chicken[i].width >= clickX) && (chicken[i].position.y <= clickY && chicken[i].position.y + chicken[i].height >= clickY)){
             console.log("trefil jsem slepici");
             chicken.splice(i, 1);
+            score++;
         }
     }
 });
+
+const generateChickens = () => {
+    for (let i = 1; i <= 20; i++) {
+        if(i%2 == 0) {
+            chicken.push(new Chicken(canvas.width + i * 150, chickenRot, "rightToLeft"));
+        } else {
+            chicken.push(new Chicken(-150 * i, chickenRemove, "leftToRight"));
+        }
+    }
+}
+
+
 
 
 function botMovement() {
 
     if(chicken.length == 0) {
-        document.write("game over");
         return;
     }
     
@@ -103,7 +112,7 @@ function botMovement() {
     }
 
     generate();
-   
+    hp();
  }
  requestAnimationFrame(botMovement);
  console.log(start);
