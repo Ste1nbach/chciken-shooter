@@ -4,6 +4,7 @@
     box-sizing: border-box;
     overflow: hidden;
     background-color: dimgrey;
+    cursor: url("../img/cursor.jpg"), auto;
 }
 
 #wrap {
@@ -28,11 +29,10 @@
 }
 
 #canvas {
-    background-color: #fff;
     display: none;
     max-height: 100%;
     max-width: 100%;
     align-items: center;
     justify-content: center;
-    background-image: url(/res/img/background.png);
+    background-image: url("../img/background.png");
 }
