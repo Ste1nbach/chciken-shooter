@@ -16,6 +16,7 @@ chickenGolden.src = "./res/img/golden2.png";
 planeImg.src = "./res/img/letadlo2.png";
 
 let chicken = [];
+let speed = 3;
 let arrayLength = 10;
 let start = false;
 let pts = 0;
@@ -65,6 +66,7 @@ const generate = () => {
                 posY = Math.floor(Math.random() * (500 - 0) + 0);
                 chicken[i].position.y = posY;
                 chicken[i].position.x = canvas.width;
+                chicken.splice(i, 1);
                 HP--;
             }
 
@@ -73,6 +75,7 @@ const generate = () => {
                 posY = Math.floor(Math.random() * (500 - 0) + 0);
                 chicken[i].position.y = posY;
                 chicken[i].position.x = canvas.width;
+                chicken.splice(i, 1);
                 HP--;
             }
         }
@@ -97,8 +100,6 @@ const end = () => {
     }
 
 }
-
-
 
 const score = () => {
     ctx.fillStyle = "white";
@@ -129,6 +130,7 @@ canvas.addEventListener('click', function (event) {
                 chicken.splice(i, 1);
             } else {
                 pts++;
+                speed += 0.03;
                 if (chicken[i].direction == "leftToRight") {
                     generateLeftToRight(i + 3);
                     console.log(chicken.length);
@@ -184,16 +186,15 @@ function gameLoop() {
 
         for (let i = 0; i < chicken.length; i++) {
             if (chicken[i].direction == "leftToRight") {
-                chicken[i].position.x += 3;
+                chicken[i].position.x += speed;
             } else {
-                chicken[i].position.x -= 3;
+                chicken[i].position.x -= speed;
             }
 
 
 
         }
-        // golden.position.x += 3;
-        plane2.position.x -= 3;
+        plane2.position.x -= speed;
 
         generate();
     }
