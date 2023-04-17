@@ -19,12 +19,13 @@
     font-family: 'Noto Sans Mono', monospace;
 }
 
-#btn {
+#play {
     border: none;
     background: none;
     font-family: 'Noto Sans Mono', monospace;
     font-size: 30px;
     cursor: pointer;
+    padding-bottom: 400px;
 }
 
 #canvas {
@@ -33,5 +34,5 @@
     max-width: 100%;
     align-items: center;
     justify-content: center;
-    background-image: url("../img/background.png");
+    background-image: url("../img/bg2.png");
 }

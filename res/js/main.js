@@ -1,6 +1,6 @@
-import { canvas, wrap, btn, ctx } from "./canvas.js";
-import { Chicken } from "./chicken.js";
-import { Airplane } from "./plane.js";
+import { canvas, wrap, play, ctx } from "./packages/canvas.js";
+import { Chicken } from "./packages/chicken.js";
+import { Btn } from "./packages/button.js";
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -8,30 +8,31 @@ canvas.height = window.innerHeight;
 let chickenRemove = new Image;
 let chickenRot = new Image;
 let chickenGolden = new Image;
-let planeImg = new Image;
+let bulletImg = new Image;
 
 chickenRemove.src = "./res/img/ptak-remove.png";
 chickenRot.src = "./res/img/ptak2-remove.png";
 chickenGolden.src = "./res/img/golden2.png";
-planeImg.src = "./res/img/letadlo2.png";
+bulletImg.src = "./res/img/naboj.png";
+
+const btn = new Btn(bulletImg);
 
 let chicken = [];
-let speed = 3;
+let ammoCapacity = 7;
+let ammo = ammoCapacity;
+let cost = 10;
+let timer = 0;
+let speed = 2;
 let arrayLength = 10;
 let start = false;
 let pts = 0;
 let HP = 10;
 let death = false;
 let goldenSpawn = false;
-let planeSpawn = false;
 let chance = Math.floor(Math.random() * 5000);
-let chance2 = Math.floor(Math.random() * 2000);
 let posY = Math.floor(Math.random() * canvas.height);
 
-//const golden = new GoldenChicken(0, chickenGolden, "leftToRight");
-const plane2 = new Airplane(0, planeImg, "rightToLeft");
-
-btn.onclick = () => {
+play.onclick = () => {
     wrap.style.display = "none";
     canvas.style.display = "flex";
     start = true;
@@ -42,23 +43,11 @@ const generate = () => {
     for (let i = 0; i < chicken.length; i++) {
 
         chance = Math.floor(Math.random() * 5000);
-        chance2 = Math.floor(Math.random() * 2000);
 
         if (chance == 5 && goldenSpawn == false) {
             posY = Math.floor(Math.random() * (500 - 0) + 0);
             goldenSpawn = true;
             chicken.push(new Chicken(-150 * i, chickenGolden, "leftToRight", "golden"));
-        }
-
-        if (chance2 == 5 && planeSpawn == false) {
-            posY = Math.floor(Math.random() * (500 - 0) + 0);
-            plane2.position.y = posY;
-            plane2.position.x = canvas.width;
-            planeSpawn = true;
-        }
-
-        if (planeSpawn == true) {
-            plane2.update();
         }
 
         if (chicken[i].direction == "leftToRight") {
@@ -84,23 +73,6 @@ const generate = () => {
 
 }
 
-const end = () => {
-
-    if (HP == 0) {
-        start = false;
-        death = true;
-
-        if (death == true) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.font = "bold 30px sans-serif";
-            ctx.fillText("GAME OVER PRESS SPACE TO RESTART", canvas.width / 2 - 250, canvas.height / 2);
-        }
-
-    }
-
-}
-
 const score = () => {
     ctx.fillStyle = "white";
     ctx.font = "bold 20px sans-serif";
@@ -113,36 +85,64 @@ const hp = () => {
     ctx.fillText(`HP: ${HP}`, 20, 60);
 }
 
+const ammoCount = () => {
+    ctx.fillStyle = "white";
+    ctx.font = "bold 20px sans-serif";
+    ctx.fillText(`Ammo: ${ammo}`, 20, 90);
+}
 
+const reloading = () => {
+    ctx.fillStyle = "red";
+    ctx.font = "bold 60px sans-serif";
+    ctx.fillText(`Reloading`, canvas.width / 2 - 150, canvas.height / 2);
+}
+
+const value = () => {
+    ctx.fillStyle = "black";
+    ctx.font = "bold 20px sans-serif";
+    ctx.fillText(`Cost: ${cost}`, canvas.width - 160, canvas.height - 20);
+}
 
 canvas.addEventListener('click', function (event) {
     let clickX = event.clientX;
     let clickY = event.clientY;
 
-    for (let i = 0; i < chicken.length; i++) {
-        if ((chicken[i].position.x <= clickX && chicken[i].position.x + chicken[i].width >= clickX) && (chicken[i].position.y <= clickY && chicken[i].position.y + chicken[i].height >= clickY)) {
-            if (chicken[i].rarity == "golden") {
-                pts = pts + 5;
-                if (chicken[i].direction == "leftToRight") {
-                    goldenSpawn = false;
-                    generate();
-                }
-                chicken.splice(i, 1);
-            } else {
-                pts++;
-                speed += 0.03;
-                if (chicken[i].direction == "leftToRight") {
-                    generateLeftToRight(i + 3);
-                    console.log(chicken.length);
-                } else {
-                    generateRightToLeft(i + 3);
-                    console.log(chicken.length);
-                }
-                chicken.splice(i, 1);
-            }
+    if((btn.position.x <= clickX && btn.position.x + btn.width >= clickX) && (btn.position.y <= clickY && btn.position.y + btn.height >= clickY)) {
+        ammo++;
+        if(pts >= cost) {
+            ammoCapacity++;
+            pts -= cost;
+            cost += 10;
         }
     }
 
+    if (ammo != 0) {
+        ammo--;
+
+        for (let i = 0; i < chicken.length; i++) {
+            if ((chicken[i].position.x <= clickX && chicken[i].position.x + chicken[i].width >= clickX) && (chicken[i].position.y <= clickY && chicken[i].position.y + chicken[i].height >= clickY)) {
+                if (chicken[i].rarity == "golden") {
+                    pts = pts + 5;
+                    if (chicken[i].direction == "leftToRight") {
+                        goldenSpawn = false;
+                        generate();
+                    }
+                    chicken.splice(i, 1);
+                } else {
+                    pts++;
+                    speed += 0.03;
+                    if (chicken[i].direction == "leftToRight") {
+                        generateLeftToRight(i + 3);
+                        console.log(chicken.length);
+                    } else {
+                        generateRightToLeft(i + 3);
+                        console.log(chicken.length);
+                    }
+                    chicken.splice(i, 1);
+                }
+            }
+        }
+    }
 });
 
 const generateLeftToRight = (i) => {
@@ -174,8 +174,25 @@ window.addEventListener("keydown", (e) => {
     }
 });
 
+const end = () => {
+
+    if (HP == 0) {
+        start = false;
+        death = true;
+
+        if (death == true) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.font = "bold 30px sans-serif";
+            ctx.fillText("GAME OVER PRESS SPACE TO RESTART", canvas.width / 2 - 250, canvas.height / 2);
+        }
+
+    }
+
+}
 
 function gameLoop() {
+
 
     if (chicken.length == 0) {
         return;
@@ -194,13 +211,24 @@ function gameLoop() {
 
 
         }
-        plane2.position.x -= speed;
 
         generate();
     }
+
+    if (ammo == 0) {
+        timer++;
+        reloading();
+        if (timer == 200) {
+            ammo = ammoCapacity;
+            timer = 0;
+        }
+    }
+    btn.update();
     requestAnimationFrame(gameLoop);
+    value();
     score();
     hp();
+    ammoCount();
     end();
 }
 
