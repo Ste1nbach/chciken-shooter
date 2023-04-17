@@ -112,7 +112,7 @@ canvas.addEventListener('click', function (event) {
         if(pts >= cost) {
             ammoCapacity++;
             pts -= cost;
-            cost += 10;
+            cost += 5;
         }
     }
 
