@@ -1,6 +1,7 @@
 import { canvas, wrap, play, ctx } from "./packages/canvas.js";
 import { Chicken } from "./packages/chicken.js";
 import { Btn } from "./packages/button.js";
+import { Hearts } from "./packages/heart.js";
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -9,24 +10,29 @@ let chickenRemove = new Image;
 let chickenRot = new Image;
 let chickenGolden = new Image;
 let bulletImg = new Image;
+let heartImg = new Image;
 
 chickenRemove.src = "./res/img/ptak-remove.png";
 chickenRot.src = "./res/img/ptak2-remove.png";
 chickenGolden.src = "./res/img/golden2.png";
 bulletImg.src = "./res/img/naboj.png";
+heartImg.src = "./res/img/srdce.png";
 
 const btn = new Btn(bulletImg);
+const heartBtn = new Hearts(heartImg);
 
 let chicken = [];
 let ammoCapacity = 7;
 let ammo = ammoCapacity;
 let cost = 10;
+let cost2 = 10;
 let timer = 0;
 let speed = 2;
 let arrayLength = 10;
 let start = false;
 let pts = 0;
 let HP = 10;
+let HP2 = HP;
 let death = false;
 let goldenSpawn = false;
 let chance = Math.floor(Math.random() * 5000);
@@ -103,15 +109,30 @@ const value = () => {
     ctx.fillText(`Cost: ${cost}`, canvas.width - 160, canvas.height - 20);
 }
 
+const value2 = () => {
+    ctx.fillStyle = "black";
+    ctx.font = "bold 20px sans-serif";
+    ctx.fillText(`Cost: ${cost}`, 40, canvas.height - 20);
+}
+
 canvas.addEventListener('click', function (event) {
     let clickX = event.clientX;
     let clickY = event.clientY;
 
-    if((btn.position.x <= clickX && btn.position.x + btn.width >= clickX) && (btn.position.y <= clickY && btn.position.y + btn.height >= clickY)) {
+    if ((btn.position.x <= clickX && btn.position.x + btn.width >= clickX) && (btn.position.y <= clickY && btn.position.y + btn.height >= clickY)) {
         ammo++;
-        if(pts >= cost) {
+        if (pts >= cost) {
             ammoCapacity++;
             pts -= cost;
+            cost += 5;
+        }
+    }
+
+    if((btn.position.x <= clickX && btn.position.x + btn.width >= clickX) && (btn.position.y <= clickY && btn.position.y + btn.height >= clickY)) {
+        ammo++;
+        if(pts >= cost2) {
+            HP2++;
+            pts -= cost2;
             cost += 5;
         }
     }
@@ -218,14 +239,16 @@ function gameLoop() {
     if (ammo == 0) {
         timer++;
         reloading();
-        if (timer == 200) {
+        if (timer == 150) {
             ammo = ammoCapacity;
             timer = 0;
         }
     }
     btn.update();
+    heartBtn.update();
     requestAnimationFrame(gameLoop);
     value();
+    value2();
     score();
     hp();
     ammoCount();
