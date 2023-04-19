@@ -32,7 +32,6 @@ let arrayLength = 10;
 let start = false;
 let pts = 0;
 let HP = 10;
-let HP2 = HP;
 let death = false;
 let goldenSpawn = false;
 let chance = Math.floor(Math.random() * 5000);
@@ -122,16 +121,16 @@ canvas.addEventListener('click', function (event) {
     if ((btn.position.x <= clickX && btn.position.x + btn.width >= clickX) && (btn.position.y <= clickY && btn.position.y + btn.height >= clickY)) {
         ammo++;
         if (pts >= cost) {
-            ammoCapacity++;
+            ammoCapacity += 3;
             pts -= cost;
             cost += 5;
         }
     }
 
-    if((btn.position.x <= clickX && btn.position.x + btn.width >= clickX) && (btn.position.y <= clickY && btn.position.y + btn.height >= clickY)) {
+    if((heartBtn.position.x <= clickX && heartBtn.position.x + heartBtn.width >= clickX) && (heartBtn.position.y <= clickY && heartBtn.position.y + heartBtn.height >= clickY)) {
         ammo++;
         if(pts >= cost2) {
-            HP2++;
+            HP++;
             pts -= cost2;
             cost += 5;
         }
