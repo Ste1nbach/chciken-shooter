@@ -32,7 +32,6 @@ let arrayLength = 10;
 let start = false;
 let pts = 0;
 let HP = 10;
-let death = false;
 let goldenSpawn = false;
 let chance = Math.floor(Math.random() * 5000);
 let posY = Math.floor(Math.random() * canvas.height);
@@ -198,21 +197,15 @@ const end = () => {
 
     if (HP == 0) {
         start = false;
-        death = true;
-
-        if (death == true) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "white";
             ctx.font = "bold 30px sans-serif";
             ctx.fillText("GAME OVER PRESS SPACE TO RESTART", canvas.width / 2 - 250, canvas.height / 2);
-        }
-
     }
 
 }
 
 function gameLoop() {
-
 
     if (chicken.length == 0) {
         return;
@@ -227,9 +220,6 @@ function gameLoop() {
             } else {
                 chicken[i].position.x -= speed;
             }
-
-
-
         }
 
         generate();
