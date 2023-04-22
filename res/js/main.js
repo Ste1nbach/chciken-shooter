@@ -110,7 +110,7 @@ const value = () => {
 const value2 = () => {
     ctx.fillStyle = "black";
     ctx.font = "bold 20px sans-serif";
-    ctx.fillText(`Cost: ${cost}`, 40, canvas.height - 20);
+    ctx.fillText(`Cost: ${cost2}`, 40, canvas.height - 20);
 }
 
 canvas.addEventListener('click', function (event) {
@@ -131,7 +131,7 @@ canvas.addEventListener('click', function (event) {
         if(pts >= cost2) {
             HP++;
             pts -= cost2;
-            cost += 5;
+            cost2 += 5;
         }
     }
 
@@ -205,6 +205,15 @@ const end = () => {
 
 }
 
+function texts() {
+    value();
+    value2();
+    score();
+    hp();
+    ammoCount();
+    end();
+}
+
 function gameLoop() {
 
     if (chicken.length == 0) {
@@ -236,12 +245,7 @@ function gameLoop() {
     btn.update();
     heartBtn.update();
     requestAnimationFrame(gameLoop);
-    value();
-    value2();
-    score();
-    hp();
-    ammoCount();
-    end();
+    texts();
 }
 
 generateChickens();
