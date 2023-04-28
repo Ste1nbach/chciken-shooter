@@ -1,4 +1,4 @@
-export {canvas, wrap, play, ctx, };
+export {canvas, wrap, play, ctx };
 
 const canvas = document.querySelector("canvas");
 const wrap = document.getElementById("wrap");
